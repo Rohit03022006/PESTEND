@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+/* Custom styles for mobile-first approach */
+@layer base {
+  html {
+    @apply text-[16px]; /* Base font size for mobile */
+  }
+  
+  body {
+    @apply bg-gray-50 text-gray-900 antialiased;
+  }
+}
+
+@layer components {
+  /* Mobile-first container */
+  .container-mobile {
+    @apply max-w-full px-4 mx-auto;
+  }
+  
+  /* Common mobile components */
+  .mobile-btn {
+    @apply w-full py-3 px-4 bg-blue-600 text-white rounded-lg font-medium 
+           hover:bg-blue-700 active:bg-blue-800 transition-colors;
+  }
+  
+  .mobile-card {
+    @apply bg-white rounded-xl shadow-sm p-4 border border-gray-200;
+  }
+}
+
+@supports(padding: max(0px)) {
+  .pb-safe {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+  .pt-safe {
+    padding-top: max(1rem, env(safe-area-inset-top));
+  }
+}
