@@ -50,13 +50,6 @@ class Pest:
         pest['_id'] = str(pest['_id'])
         if 'fieldId' in pest and isinstance(pest['fieldId'], ObjectId):
             pest['fieldId'] = str(pest['fieldId'])
-        
-        # Convert datetime objects to ISO format strings
-        date_fields = ['detectedDate', 'createdAt', 'updatedAt']
-        for field in date_fields:
-            if field in pest and isinstance(pest[field], datetime):
-                pest[field] = pest[field].isoformat()
-        
         return pest
 
 class Pump:
@@ -75,11 +68,4 @@ class Pump:
         pump['_id'] = str(pump['_id'])
         if 'fieldId' in pump and isinstance(pump['fieldId'], ObjectId):
             pump['fieldId'] = str(pump['fieldId'])
-        
-        # Convert datetime objects to ISO format strings
-        date_fields = ['lastMaintenance', 'nextMaintenance', 'createdAt', 'updatedAt']
-        for field in date_fields:
-            if field in pump and isinstance(pump[field], datetime):
-                pump[field] = pump[field].isoformat()
-        
         return pump
