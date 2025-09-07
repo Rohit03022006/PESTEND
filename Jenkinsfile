@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', 
+                git branch: 'master', 
                 url: 'https://github.com/Rohit03022006/PESTEND.git'
             }
         }
