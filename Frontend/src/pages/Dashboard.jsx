@@ -18,7 +18,6 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch data from MongoDB
   useEffect(() => {
     fetchDashboardData();
   }, []);
@@ -28,24 +27,20 @@ const Dashboard = () => {
       setLoading(true);
       setError(null);
 
-      // Fetch field data
       const fieldResponse = await axios.get(
         "http://localhost:5000/api/fields/latest"
       );
       const fieldData = fieldResponse.data.data;
       setFieldData(fieldData);
 
-      // Fetch pest data
       const pestResponse = await axios.get("http://localhost:5000/api/pests");
       const pestData = pestResponse.data.data || [];
       setPestData(pestData);
 
-      // Fetch pump data
       const pumpsResponse = await axios.get("http://localhost:5000/api/pumps");
       const pumpData = pumpsResponse.data.data || [];
       setPumps(pumpData);
 
-      // Calculate stats based on fetched data
       calculateStats(fieldData, pestData);
     } catch (err) {
       console.error("Error fetching dashboard data:", err);
@@ -58,7 +53,6 @@ const Dashboard = () => {
   const calculateStats = (fieldData, pestData) => {
     if (!fieldData) return;
 
-    // Calculate health score based on pest severity
     let healthScore = 100;
     if (pestData && pestData.length > 0) {
       pestData.forEach((pest) => {
@@ -70,12 +64,10 @@ const Dashboard = () => {
 
     healthScore = Math.max(healthScore, 0);
 
-    // Calculate predicted yield based on crop type and health
     let baseYield = "3.2 tons/acre";
     if (fieldData.cropType === "Rice") baseYield = "4.1 tons/acre";
     if (fieldData.cropType === "Wheat") baseYield = "3.8 tons/acre";
 
-    // Adjust yield based on health score
     const yieldFactor = healthScore / 100;
     const predictedYield = `${(parseFloat(baseYield) * yieldFactor).toFixed(
       1
