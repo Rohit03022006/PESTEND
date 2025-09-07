@@ -7,10 +7,15 @@ import PhotoUpload from './pages/PhotoUpload.jsx';
 import Header from './components/custom/Header.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import PestsideStore from './pages/PesticideStore.jsx';
+import AreaDetails from './pages/AreaDetails.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+  },
+  {
+    path: '/area-details',
+    element: <AreaDetails />,
   },
   {
     path: '/photo-upload',

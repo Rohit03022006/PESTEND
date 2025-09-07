@@ -19,7 +19,7 @@ const Hero = () => {
         Get pesticide recommendations tailored to your crop type,
         climate, and soil conditions — reducing losses and boosting yield.
       </p>
-      <Link to="/photo-upload" className="mt-8">
+      <Link to="/area-details" className="mt-8">
         <Button className="mt-5 px-6 py-6 text-xl font-semibold">
           Upload Crop Image & Detect Pest
         </Button>

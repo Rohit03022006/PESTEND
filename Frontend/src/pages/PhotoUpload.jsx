@@ -8,7 +8,7 @@ import {
 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
-import axios from "axios"; // Import axios
+import axios from "axios"; 
 
 const PhotoUpload = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
