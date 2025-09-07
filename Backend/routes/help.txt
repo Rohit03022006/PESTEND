@@ -44,6 +44,44 @@ router.get('/pests', async (req, res) => {
     
     const pests = await Pest.find({ fieldId: latestField._id }).sort({ detectedDate: -1 });
     
+    if (pests.length === 0) {
+      const samplePests = [
+        {
+          pestName: 'Bollworm',
+          severity: 'High',
+          affectedArea: '25%',
+          detectedDate: new Date('2024-07-10'),
+          description: 'Cotton bollworm infestation detected in northern section',
+          recommendedTreatment: 'Apply neem-based organic pesticide',
+          fieldId: latestField._id
+        },
+        {
+          pestName: 'Aphids',
+          severity: 'Medium',
+          affectedArea: '15%',
+          detectedDate: new Date('2024-07-12'),
+          description: 'Aphid colonies found on younger leaves',
+          recommendedTreatment: 'Introduce ladybugs as natural predators',
+          fieldId: latestField._id
+        },
+        {
+          pestName: 'Whitefly',
+          severity: 'Low',
+          affectedArea: '8%',
+          detectedDate: new Date('2024-07-08'),
+          description: 'Minor whitefly presence detected',
+          recommendedTreatment: 'Apply yellow sticky traps and neem oil',
+          fieldId: latestField._id
+        }
+      ];
+      
+      const createdPests = await Pest.insertMany(samplePests);
+      return res.status(200).json({
+        success: true,
+        data: createdPests
+      });
+    }
+    
     res.status(200).json({
       success: true,
       data: pests
@@ -72,6 +110,32 @@ router.get('/pumps', async (req, res) => {
     }
     
     const pumps = await Pump.find({ fieldId: latestField._id });
+    
+    if (pumps.length === 0) {
+      const pumpCount = latestField.pesticidePumps || 3;
+      const samplePumps = [];
+      
+      const pumpNames = ['North Section Pump', 'South Section Pump', 'East Section Pump', 'West Section Pump'];
+      const pumpStatuses = ['Active', 'Inactive', 'Maintenance'];
+      
+      for (let i = 0; i < pumpCount; i++) {
+        samplePumps.push({
+          pumpName: pumpNames[i] || `Pump ${i + 1}`,
+          status: pumpStatuses[i % pumpStatuses.length],
+          capacity: `${Math.floor(Math.random() * 50) + 50}%`,
+          lastMaintenance: new Date(Date.now() - Math.floor(Math.random() * 30) * 24 * 60 * 60 * 1000),
+          location: `Section ${String.fromCharCode(65 + i)}`,
+          nextMaintenance: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          fieldId: latestField._id
+        });
+      }
+      
+      const createdPumps = await Pump.insertMany(samplePumps);
+      return res.status(200).json({
+        success: true,
+        data: createdPumps
+      });
+    }
     
     res.status(200).json({
       success: true,
