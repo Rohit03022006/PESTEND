@@ -16,7 +16,7 @@ const PhotoUpload = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [uploadProgress, setUploadProgress] = useState({});
   const [isUploading, setIsUploading] = useState(false);
-  const [prediction, setPrediction] = useState(null); // State for prediction result
+  const [prediction, setPrediction] = useState(null); 
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
@@ -130,7 +130,6 @@ const PhotoUpload = () => {
     e.preventDefault();
     if (selectedFiles.length === 0) return;
     
-    // Call the prediction function instead of directly navigating
     await fetchPrediction(selectedFiles);
   };
 
