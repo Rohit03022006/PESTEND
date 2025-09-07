@@ -44,7 +44,6 @@ function AreaDetails() {
       (position) => {
         const { latitude, longitude } = position.coords;
         
-        // Reverse geocode to get address
         reverseGeocode(latitude, longitude);
       },
       (error) => {
@@ -143,7 +142,6 @@ function AreaDetails() {
     setIsLoading(true);
     
     try {
-      // Send data to backend API
       const response = await axios.post('http://localhost:5000/api/fields', formData, {
         headers: {
           'Content-Type': 'application/json',
@@ -153,7 +151,6 @@ function AreaDetails() {
       console.log('Data saved successfully:', response.data);
       setIsSubmitted(true);
       
-      // Redirect to PhotoUpload page after 1 second
       setTimeout(() => {
         navigate('/photo-upload');
       }, 1000);
@@ -161,7 +158,6 @@ function AreaDetails() {
     } catch (error) {
       console.error('Error saving data:', error);
       
-      // Show error message to user
       setErrors({ 
         submit: error.response?.data?.message || 'Failed to save data. Please try again.' 
       });
