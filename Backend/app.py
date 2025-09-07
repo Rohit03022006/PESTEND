@@ -6,28 +6,22 @@ import os
 from datetime import datetime
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 def create_app():
     app = Flask(__name__)
     
-    # Configuration
     app.config['MONGO_URI'] = os.getenv('MONGODB_URI')
     app.config['JSON_SORT_KEYS'] = False
     
-    # Initialize extensions
     mongo.init_app(app)
     
-    # CORS configuration
     CORS(app, origins=os.getenv('CLIENT_URL', 'http://localhost:5173'), supports_credentials=True)
     
-    # Register blueprints
     api_prefix = os.getenv('API_PREFIX', '/api')
     from routes.api_routes import api_bp
     app.register_blueprint(api_bp, url_prefix=api_prefix)
     
-    # Health check endpoint
     @app.route('/health')
     def health_check():
         return jsonify({
@@ -36,7 +30,6 @@ def create_app():
             'timestamp': datetime.utcnow().isoformat()
         })
     
-    # 404 handler
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
@@ -44,7 +37,6 @@ def create_app():
             'message': 'Route not found'
         }), 404
     
-    # Error handling middleware
     @app.errorhandler(Exception)
     def handle_error(error):
         print(f'Unhandled error: {error}')
@@ -60,7 +52,6 @@ if __name__ == '__main__':
     app = create_app()
     
     with app.app_context():
-        # Create indexes
         try:
             Field.create_indexes()
             Pest.create_indexes()
