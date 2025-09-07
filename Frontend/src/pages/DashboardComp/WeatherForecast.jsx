@@ -67,8 +67,7 @@ const WeatherForecast = () => {
     try {
       setLoading(true);
       setError(null);
-
-      // Use the current weather endpoint instead of forecast
+      
       const response = await axios.get(
         `https://api.openweathermap.org/data/2.5/weather?lat=${location.lat}&lon=${location.lon}&appid=${API_KEY}&units=metric`
       );
