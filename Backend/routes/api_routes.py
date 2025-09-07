@@ -91,7 +91,6 @@ def create_field():
     try:
         field_data = request.get_json()
         
-        # Validate required fields
         required_fields = ['cropType', 'area', 'location', 'expectedHarvest', 'pesticidePumps', 'plantingDate']
         missing_fields = [field for field in required_fields if field not in field_data or not field_data[field]]
         
@@ -101,7 +100,6 @@ def create_field():
                 'message': f'Missing required fields: {", ".join(missing_fields)}'
             }), 400
         
-        # Prepare data for MongoDB
         field_doc = {
             'cropType': field_data['cropType'],
             'area': field_data['area'],
@@ -164,7 +162,6 @@ def create_pest():
                 'message': 'No field data found'
             }), 404
         
-        # Prepare data for MongoDB
         pest_doc = {
             'fieldId': latest_field['_id'],
             'pestName': pest_data['pestName'],
