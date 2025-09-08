@@ -25,8 +25,6 @@ function AreaDetails() {
   const cropOptions = [
     'Wheat'
   ];
-
-  // Get current location automatically when component mounts
   useEffect(() => {
     getCurrentLocation();
   }, []);
