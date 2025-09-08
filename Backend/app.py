@@ -16,7 +16,7 @@ def create_app():
     
     mongo.init_app(app)
     
-    CORS(app, origins=os.getenv('CLIENT_URL', 'http://localhost:5173'), supports_credentials=True)
+    CORS(app, resources={r"/*": {"origins": "*"}}, supports_credentials=True)
     
     api_prefix = os.getenv('API_PREFIX', '/api')
     from routes.api_routes import api_bp
