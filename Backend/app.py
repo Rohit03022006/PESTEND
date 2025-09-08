@@ -30,6 +30,30 @@ def create_app():
             'timestamp': datetime.utcnow().isoformat()
         })
     
+    @app.route('/test')
+    def test_route():
+        """Test route to verify server is working"""
+        try:
+            # Test database connection
+            mongo.db.command('ping')
+            db_status = 'connected'
+        except Exception as e:
+            db_status = f'error: {str(e)}'
+        
+        return jsonify({
+            'success': True,
+            'message': 'Test route is working!',
+            'server_time': datetime.utcnow().isoformat(),
+            'database_status': db_status,
+            'environment': os.getenv('NODE_ENV', 'development'),
+            'api_prefix': os.getenv('API_PREFIX', '/api'),
+            'endpoints': {
+                'health': '/health',
+                'test': '/test',
+                'api_base': f'{os.getenv("API_PREFIX", "/api")}/'
+            }
+        })
+    
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
@@ -68,5 +92,6 @@ if __name__ == '__main__':
     print(f'Environment: {env}')
     print(f'API available at: http://localhost:{port}{api_prefix}')
     print(f'MongoDB connected to: {app.config["MONGO_URI"]}')
+    print(f'Test route available at: http://localhost:{port}/test')
     
     app.run(host='0.0.0.0', port=port, debug=(env == 'development'))
