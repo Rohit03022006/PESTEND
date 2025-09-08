@@ -22,7 +22,7 @@ def create_app():
     from routes.api_routes import api_bp
     app.register_blueprint(api_bp, url_prefix=api_prefix)
     
-    @app.route('/health')
+    @app.route('/api/health')
     def health_check():
         return jsonify({
             'success': True,
@@ -30,11 +30,10 @@ def create_app():
             'timestamp': datetime.utcnow().isoformat()
         })
     
-    @app.route('/test')
+    @app.route('/api/test')
     def test_route():
         """Test route to verify server is working"""
         try:
-            # Test database connection
             mongo.db.command('ping')
             db_status = 'connected'
         except Exception as e:
@@ -48,8 +47,8 @@ def create_app():
             'environment': os.getenv('NODE_ENV', 'development'),
             'api_prefix': os.getenv('API_PREFIX', '/api'),
             'endpoints': {
-                'health': '/health',
-                'test': '/test',
+                'health': 'api/health',
+                'test': 'api/test',
                 'api_base': f'{os.getenv("API_PREFIX", "/api")}/'
             }
         })
