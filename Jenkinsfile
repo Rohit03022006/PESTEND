@@ -3,7 +3,7 @@ pipeline {
     environment {
         BACKEND_IMAGE = 'rohitxten/pestend_backend_app:latest'
         FRONTEND_IMAGE = 'rohitxten/pestend_frontend_app:latest'
-        DOCKER_REGISTRY = 'docker.io' 
+        DOCKER_REGISTRY = 'docker.io'
     }
     stages {
         stage('Clone Repository') {
@@ -21,17 +21,22 @@ pipeline {
                     passwordVariable: 'DOCKER_PASS'
                 )]) {
                     sh """
+                    # Check if requirements.txt exists
+                    echo "Checking Backend directory structure:"
+                    ls -la ./Backend/
+                    
                     # Login to Docker Hub
                     docker login -u "$DOCKER_USER" -p "$DOCKER_PASS" $DOCKER_REGISTRY
                     
                     # Build and push backend
                     echo "Building backend image..."
-                    docker build -t $BACKEND_IMAGE ./backend
-                    docker push $BACKEND_IMAGE
+                    docker build -t $BACKEND_IMAGE ./Backend
                     
                     # Build and push frontend
                     echo "Building frontend image..."
-                    docker build -t $FRONTEND_IMAGE ./frontend
+                    docker build -t $FRONTEND_IMAGE ./Frontend
+                    
+                    docker push $BACKEND_IMAGE
                     docker push $FRONTEND_IMAGE
                     
                     # Logout from Docker
@@ -39,31 +44,38 @@ pipeline {
                     """
                 }
             }
-        }
+        }  // <-- This closing bracket was missing!
         
         stage('Deploy Application') {
             steps {
+                // Stop and remove any existing containers
                 sh 'docker stop pestend-frontend pestend-backend || true'
                 sh 'docker rm pestend-frontend pestend-backend || true'
+                
+                // Create a network for containers to communicate
+                sh 'docker network create pestend-network || true'
+                
+                // Start Backend
                 sh """
                 docker run -d \
                   --name pestend-backend \
+                  --network pestend-network \
                   --restart unless-stopped \
                   -e MONGODB_URI="" \
-                  -e CLIENT_URL="http://localhost:5173" \
                   -e PORT=5000 \
                   -e NODE_ENV=production \
-                  -e API_PREFIX=/api \
                   -p 5000:5000 \
                   $BACKEND_IMAGE
                 """
-            
+                
+                // Start Frontend
                 sh """
                 docker run -d \
                   --name pestend-frontend \
+                  --network pestend-network \
                   --restart unless-stopped \
                   -e VITE_WEATHER_API_KEY=48fecb67dc2d573ccdc680edf5bd14ca \
-                  -e VITE_API_BASE_URL=http://localhost:5000/api \
+                  -e VITE_API_BASE_URL=http://pestend-backend:5000/api \
                   -p 80:80 \
                   $FRONTEND_IMAGE
                 """
